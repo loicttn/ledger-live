@@ -126,6 +126,7 @@ export default function MarketCoinScreen() {
   const availableOnBuy =
     currency && currency.ticker && onRampAvailableTickers.includes(currency.ticker?.toUpperCase());
   const availableOnSwap = internalCurrency && swapAvailableIds.includes(internalCurrency.id);
+  const availableOnStake = currency?.id === "ethereum";
 
   const color = internalCurrency
     ? getCurrencyColor(internalCurrency, colors.background.main)
@@ -153,6 +154,22 @@ export default function MarketCoinScreen() {
       });
     },
     [currency, history, ptxSmartRouting],
+  );
+
+  const onStake = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setTrackingSource("Page Market Coin");
+
+      history.push({
+        pathname: "/platform/kiln",
+        state: {
+          defaultCurrency: currency,
+        },
+      });
+    },
+    [currency, history],
   );
 
   const openAddAccounts = useCallback(() => {
@@ -262,6 +279,16 @@ export default function MarketCoinScreen() {
               {availableOnSwap && (
                 <Button data-test-id="market-coin-swap-button" variant="color" onClick={onSwap}>
                   {t("accounts.contextMenu.swap")}
+                </Button>
+              )}
+              {availableOnStake && (
+                <Button
+                  data-test-id="market-coin-stake-button"
+                  variant="color"
+                  ml={1}
+                  onClick={onStake}
+                >
+                  {t("sidebar.stake")}
                 </Button>
               )}
             </>
