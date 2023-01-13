@@ -50,6 +50,7 @@ type Props = {
   selectCurrency: (currencyId: string) => void;
   availableOnBuy: boolean;
   availableOnSwap: boolean;
+  availableOnStake: boolean;
   range?: string;
 };
 
@@ -64,6 +65,7 @@ function MarketRowItem({
   selectCurrency,
   availableOnBuy,
   availableOnSwap,
+  availableOnStake,
   range,
 }: Props) {
   const { t } = useTranslation();
@@ -158,6 +160,22 @@ function MarketRowItem({
     [currency?.internalCurrency, currency?.ticker, flattenedAccounts, openAddAccounts, history],
   );
 
+  const onStake = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setTrackingSource("Page Market");
+
+      history.push({
+        pathname: "/platform/kiln",
+        state: {
+          defaultCurrency: currency,
+        },
+      });
+    },
+    [currency, history],
+  );
+
   const onStarClick = useCallback(
     (e: any) => {
       e.preventDefault();
@@ -231,6 +249,16 @@ function MarketRowItem({
                     onClick={onSwap}
                   >
                     {t("accounts.contextMenu.swap")}
+                  </Button>
+                )}
+                {availableOnStake && (
+                  <Button
+                    data-test-id={`market-${currency?.ticker}-stake-button`}
+                    variant="color"
+                    ml={1}
+                    onClick={onStake}
+                  >
+                    {t("sidebar.stake")}
                   </Button>
                 )}
               </Flex>

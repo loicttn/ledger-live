@@ -219,6 +219,7 @@ const CurrencyRow = memo(function CurrencyRowItem({
   const isStarred = currency && starredMarketCoins.includes(currency.id);
   const availableOnBuy = currency && onRampAvailableTickers.includes(currency.ticker.toUpperCase());
   const availableOnSwap = internalCurrency && swapAvailableIds.includes(internalCurrency.id);
+  const availableOnStake = currency.id === "ethereum";
   return (
     <MarketRowItem
       loading={!currency || (index === data.length && index > 50 && loading)}
@@ -231,6 +232,7 @@ const CurrencyRow = memo(function CurrencyRowItem({
       selectCurrency={selectCurrency}
       availableOnBuy={availableOnBuy}
       availableOnSwap={availableOnSwap}
+      availableOnStake={availableOnStake}
       range={range}
       style={{ ...style }}
     />
