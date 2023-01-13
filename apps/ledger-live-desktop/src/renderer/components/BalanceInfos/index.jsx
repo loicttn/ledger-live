@@ -139,6 +139,14 @@ export default function BalanceInfos({ totalBalance, valueChange, isAvailable, u
     });
   }, [history]);
 
+  const onStake = useCallback(() => {
+    setTrackingSource("Page Portfolio");
+
+    history.push({
+      pathname: "/stake",
+    });
+  }, [history]);
+
   return (
     <Box flow={5}>
       <Box horizontal>
@@ -166,6 +174,20 @@ export default function BalanceInfos({ totalBalance, valueChange, isAvailable, u
           onClick={onSwap}
         >
           {t("accounts.contextMenu.swap")}
+        </Button>
+        <Button
+          data-test-id="portfolio-stake-button"
+          variant="color"
+          event="button_clicked"
+          ml={1}
+          eventProperties={{
+            button: "stake",
+            page: "Page Portfolio",
+            ...swapDefaultTrack,
+          }}
+          onClick={onStake}
+        >
+          {t("sidebar.stake")}
         </Button>
       </Box>
       <Box horizontal alignItems="center" justifyContent="space-between">
