@@ -100,6 +100,8 @@ export default function AssetBalanceSummaryHeader({
       return pairs && pairs.find(({ from, to }) => [from, to].includes(currency.id));
     });
 
+  const availableOnStake = currency.id === "ethereum";
+
   const onBuy = useCallback(() => {
     setTrackingSource("asset header actions");
 
@@ -127,6 +129,22 @@ export default function AssetBalanceSummaryHeader({
     setTrackingSource("Page Asset");
     history.push({
       pathname: "/swap",
+      state: {
+        defaultCurrency: currency,
+      },
+    });
+  }, [currency, history]);
+
+  const onStake = useCallback(() => {
+    track("button_clicked", {
+      button: "stake",
+      currency: currency?.ticker,
+      page: "Page Asset",
+      ...swapDefaultTrack,
+    });
+    setTrackingSource("Page Asset");
+    history.push({
+      pathname: "/platform/kiln",
       state: {
         defaultCurrency: currency,
       },
@@ -190,6 +208,12 @@ export default function AssetBalanceSummaryHeader({
         {availableOnSwap && (
           <Button data-test-id="portfolio-swap-button" variant="color" onClick={onSwap}>
             {t("accounts.contextMenu.swap")}
+          </Button>
+        )}
+
+        {availableOnStake && (
+          <Button data-test-id="portfolio-stake-button" variant="color" ml={1} onClick={onStake}>
+            {t("sidebar.stake")}
           </Button>
         )}
       </Box>
