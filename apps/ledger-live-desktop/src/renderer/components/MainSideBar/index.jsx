@@ -301,6 +301,10 @@ const MainSideBar = () => {
     push("/swap");
   }, [push]);
 
+  const handleClickStake = useCallback(() => {
+    push("/stake");
+  }, [push]);
+
   const maybeRedirectToAccounts = useCallback(() => {
     return location.pathname === "/manager" && push("/accounts");
   }, [location.pathname, push]);
@@ -424,6 +428,16 @@ const MainSideBar = () => {
                   iconActiveColor="wallet"
                   onClick={handleClickSwap}
                   isActive={location.pathname.startsWith("/swap")}
+                  disabled={noAccounts}
+                  collapsed={secondAnim}
+                />
+                <SideBarListItem
+                  id={"stake"}
+                  label={t("sidebar.stake")}
+                  icon={IconSwap}
+                  iconActiveColor="wallet"
+                  onClick={handleClickStake}
+                  isActive={location.pathname.startsWith("/stake")}
                   disabled={noAccounts}
                   collapsed={secondAnim}
                 />

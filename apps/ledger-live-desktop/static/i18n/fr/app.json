@@ -215,6 +215,7 @@
     "manager" : "My Ledger",
     "exchange" : "Acheter / Vendre",
     "swap" : "Swap",
+    "stake": "Stake",
     "lend" : "Prêter",
     "catalog" : "Discover",
     "market" : "Marché"
