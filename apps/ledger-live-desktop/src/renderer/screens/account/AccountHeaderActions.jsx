@@ -40,6 +40,7 @@ import {
   SellActionDefault,
   SendActionDefault,
   SwapActionDefault,
+  StakeActionDefault,
 } from "./AccountActionsDefault";
 import { swapDefaultTrack } from "~/renderer/screens/exchange/Swap2/utils/index";
 import { useFeature } from "@ledgerhq/live-common/featureFlags/index";
@@ -175,6 +176,7 @@ const AccountHeaderActions = ({ account, parentAccount, openModal }: Props) => {
   const rampCatalog = useRampCatalog();
 
   // eslint-disable-next-line no-unused-vars
+  const availableOnStake = currency.id === "ethereum";
   const [availableOnBuy, availableOnSell] = useMemo(() => {
     if (!rampCatalog.value) {
       return [false, false];
@@ -199,7 +201,7 @@ const AccountHeaderActions = ({ account, parentAccount, openModal }: Props) => {
     !!(providers || storedProviders).find(({ pairs }) => {
       return pairs && pairs.find(({ from, to }) => [from, to].includes(currency.id));
     });
-
+  
   const history = useHistory();
 
   const onBuySell = useCallback(
@@ -240,6 +242,24 @@ const AccountHeaderActions = ({ account, parentAccount, openModal }: Props) => {
     setTrackingSource("Page Account");
     history.push({
       pathname: "/swap",
+      state: {
+        defaultCurrency: currency,
+        defaultAccount: account,
+        defaultParentAccount: parentAccount,
+      },
+    });
+  }, [currency, history, account, parentAccount]);
+
+  const onStakeEth = useCallback(() => {
+    track("button_clicked", {
+      button: "stake",
+      currency: currency.ticker,
+      page: "Page Account",
+      ...swapDefaultTrack,
+    });
+    setTrackingSource("Page Account");
+    history.push({
+      pathname: "/platform/kiln",
       state: {
         defaultCurrency: currency,
         defaultAccount: account,
@@ -307,12 +327,15 @@ const AccountHeaderActions = ({ account, parentAccount, openModal }: Props) => {
 
   const swapHeader = <SwapActionDefault onClick={onSwap} />;
 
+  const stakeHeader = <StakeActionDefault onClick={onStakeEth} />;
+
   const manageActionsHeader = manageActions.map(item => renderAction(item));
 
   const NonEmptyAccountHeader = (
     <FadeInButtonsContainer data-test-id="account-buttons-group" show={showButtons}>
       {manageActions.length > 0 ? manageActionsHeader : null}
       {availableOnSwap ? swapHeader : null}
+      {availableOnStake ? stakeHeader : null}
       {availableOnBuy ? buyHeader : null}
       {/** don't show sell button if ptx smart routing is not enabled or sell not available */}
       {availableOnSell && ptxSmartRouting?.enabled ? sellHeader : null}

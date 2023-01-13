@@ -6,6 +6,7 @@ import IconSend from "~/renderer/icons/Send";
 import IconSwap from "~/renderer/icons/Swap";
 import IconExchange from "~/renderer/icons/Exchange";
 import IconSell from "~/renderer/icons/Plus";
+import IconStake from "~/renderer/icons/ClaimReward";
 // $FlowFixMe
 import Button from "~/renderer/components/ButtonV3";
 import { Flex } from "@ledgerhq/react-ui";
@@ -61,6 +62,16 @@ export const SwapActionDefault = ({ onClick }: { onClick: () => void }) => {
       onClick={onClick}
       iconComponent={<IconSwap size={14} />}
       labelComponent={<Trans i18nKey="sidebar.swap" />}
+    />
+  );
+};
+
+export const StakeActionDefault = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <ActionDefault
+      onClick={onClick}
+      iconComponent={<IconStake size={14} />}
+      labelComponent={<Trans i18nKey="sidebar.stake" />}
     />
   );
 };
